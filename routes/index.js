@@ -1,7 +1,12 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router({mergeParams: true});
 
-Router.use("/medicines", require("./medicines"));
-Router.use("/users", require("./users"));
+router.use("/medicines", require("./medicines"));
+router.use("/users", require("./users"));
+router.use("/auth", require("./auth"));
+// define the about route
+router.get('/', (req, res) => {
+    res.send('About birds')
+  })
 
-module.exports = Router;
+module.exports = router
