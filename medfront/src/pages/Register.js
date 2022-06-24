@@ -1,18 +1,16 @@
 import React from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
 import Form from "../components/form";
-
-export default function Login() {
+import { Link } from "react-router-dom";
+export default function Register() {
   return (
     <div>
     <Form 
-    title="Login"
+    title="Register"
     url=""
     />
-      <Link to="/register">
+      <Link to="/">
         <button className="button-49">
-          <span>Register</span>
+          <span>Login</span>
         </button>
       </Link>
     </div>

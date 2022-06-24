@@ -1,5 +1,6 @@
 import './App.css';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,7 +12,7 @@ function App() {
     <Router>
       <Routes>
         <Route index exact element={<Login/>}/>
-        {/* <Route path="/register" exact element={<Register/>}/> */}
+        <Route path="/register" exact element={<Register/>}/>
         {/* <Route path="/main" exact element={<Main/>}/> */}
       </Routes>
       </Router>
