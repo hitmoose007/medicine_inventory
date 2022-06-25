@@ -1,12 +1,13 @@
 const express = require("express");
-const router = express.Router({mergeParams: true});
+const router = express.Router({ mergeParams: true });
+
+require("dotenv").config();
 
 router.use("/medicines", require("./medicines"));
 router.use("/users", require("./users"));
 router.use("/auth", require("./auth"));
-// define the about route
-router.get('/', (req, res) => {
-    res.send('About birds')
-  })
 
-module.exports = router
+router.use("/verification", require("./verification"));
+// define the about route
+
+module.exports = router;

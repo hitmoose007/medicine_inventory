@@ -36,6 +36,12 @@ async function userLogin(req, res) {
       });
     }
 
+    if (user.verified === false) {
+      return res.status(400).json({
+        error: "User not verified",
+      });
+    }
+
     const accessToken = jwt.sign(
       { id: user.id },
       process.env.ACCESS_TOKEN_SECRET,

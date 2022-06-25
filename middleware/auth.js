@@ -9,7 +9,7 @@ const { extractToken, decodeToken } = require("../utils/jwt");
 async function isLoggedIn(req, res, next) {
   try {
     const token = extractToken(req);
-    const decoded = await decodeToken(token);
+    const decoded = await decodeToken(token, process.env.ACCESS_TOKEN_SECRET);
     const user = await prisma.user.findFirst({
       where: {
         email: decoded.email,

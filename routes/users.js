@@ -5,7 +5,11 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const { userRegisterationSchema } = require("../validation/users");
 
+const jwt = require("jsonwebtoken");
 const { hashPassword, comparePassword } = require("../utils/hash");
+const { transporter } = require("../utils/mail");
+require("dotenv").config();
+
 router.post("/", userCreation);
 
 async function userCreation(req, res) {
@@ -40,6 +44,40 @@ async function userCreation(req, res) {
         password: hashedPassword,
       },
     });
+
+    // async email
+    jwt.sign(
+      {
+        user: Newuser.id,
+      },
+      process.env.VERIFICATION_TOKEN_SECRET,
+      {
+        expiresIn: "1d",
+      },
+      (err, emailToken) => {
+        console.log("hello");
+        const url = `http://localhost:5000/api/verification/${emailToken}`;
+
+        transporter.sendMail(
+          {
+            to: Newuser.email,
+            subject: "Confirm Email",
+            html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
+          },
+          (err, info) => {
+            console.log("here")
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(info);
+            }
+          }
+        );
+      }
+    );
+
+    //end async email
+
     res.json({
       Newuser,
     });

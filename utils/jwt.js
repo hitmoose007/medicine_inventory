@@ -8,8 +8,8 @@ async function extractToken(req) {
   return header.split(" ")[1]; // Bearer <token>
 }
 
-async function decodeToken(token) {
-  return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+async function decodeToken(token, secret) {
+  return jwt.verify(token, secret);
 }
 
 //user directly from the request
