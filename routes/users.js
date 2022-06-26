@@ -14,10 +14,12 @@ router.post("/", userCreation);
 
 async function userCreation(req, res) {
   //create user|
+  console.log(req.body)
   try {
     const { value, error } = userRegisterationSchema.validate(req.body);
 
     if (error) {
+      console.log(req)
       console.log(error);
       res.status(400).json({
         error: error.message,
