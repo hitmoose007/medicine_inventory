@@ -11,9 +11,8 @@ async function isLoggedIn(req, res, next) {
     const header = req.headers["authorization"];
     if (!header) return res.status(401).json({ error: "Unauthorized" });
 
-    const token = header.split(" ")[1];
-
-    
+    const token = header;
+    console.log(token)
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     const user = await prisma.user.findFirst({

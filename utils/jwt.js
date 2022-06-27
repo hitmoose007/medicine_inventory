@@ -4,8 +4,7 @@ const jwt = require("jsonwebtoken");
 async function extractToken(req) {
   const header = req.headers["authorization"];
   if (!header) return res.status(401).json({ error: "Unauthorized" });
-
-  return header.split(" ")[1]; // Bearer <token>
+  return header; // Bearer <token>
 }
 
 async function decodeToken(token, secret) {

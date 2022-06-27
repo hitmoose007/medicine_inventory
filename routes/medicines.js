@@ -18,6 +18,7 @@ router.post("/", isLoggedIn, createMed); //function to create a medicine
 // router.delete("/:id", isLoggedIn, deleteMed); //function to delete a medicine
 
 async function createMed(req, res) {
+    console.log("creating");
   try {
     const { value, error } = medicineSchema.validate(req.body);
     if (error) {
@@ -27,8 +28,7 @@ async function createMed(req, res) {
     }
     const header = req.headers["authorization"];
     if (!header) return res.status(401).json({ error: "Unauthorized" });
-
-    const token = header.split(" ")[1];
+    const token = header;
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     const medicine = await prisma.medicine.create({
