@@ -65,7 +65,7 @@ async function userCreation(req, res) {
             html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
           },
           (err, info) => {
-            console.log("here")
+            console.log("here");
             if (err) {
               console.log(err);
             } else {

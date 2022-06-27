@@ -9,6 +9,7 @@ async function extractToken(req) {
 }
 
 async function decodeToken(token, secret) {
+    console.log("hello")
   return jwt.verify(token, secret);
 }
 
@@ -18,6 +19,7 @@ async function getLoggedInUser(req) {
     extractToken(req);
     const token = extractToken(req);
     const decoded = await decodeToken(token);
+    
     const user = await prisma.user.findFirst({
       where: {
         email: decoded.email,
@@ -29,4 +31,10 @@ async function getLoggedInUser(req) {
       return res.status(401).json({ error: "Unauthorized" });
     }
   }
+}
+
+module.exports = {
+    extractToken,
+    decodeToken,
+    getLoggedInUser
 }
