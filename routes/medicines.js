@@ -54,7 +54,7 @@ async function createMed(req, res) {
 }
 
 async function updateMed(req, res) {
-    console.log("Updating")
+  console.log("Updating");
   const { value, error } = medicineUpdateSchema.validate(req.body);
   if (error) {
     return res.status(400).json({
@@ -82,16 +82,16 @@ async function updateMed(req, res) {
 }
 
 async function deleteMed(req, res) {
-    try {
-      const medicine = await prisma.medicine.delete({
-        where: {
-          id: req.params.id,
-        },
-      });
-      res.json(medicine);
-    } catch (error) {
-      res.json({
-        error: error.message,
-      });
-    }
+  try {
+    const medicine = await prisma.medicine.delete({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.json(medicine);
+  } catch (error) {
+    res.json({
+      error: error.message,
+    });
   }
+}

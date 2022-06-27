@@ -13,6 +13,8 @@ router.get("/", getCategories);
 router.post("/", createCategory);
 router.put("/:id", updateCategory);
 router.delete("/:id", deleteCategory);
+router.get("/:id", getCategory);
+router.get("/:id/medicines", getCategoryMedicines);
 
 async function getCategories(req, res) {
   try {
@@ -120,4 +122,46 @@ async function deleteCategory(req, res) {
     res.status(401).json({ error: error.message });
   }
 }
+
+async function getCategory(req, res) {
+  try {
+    const category = await prisma.category.findFirst({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!category) {
+      res.status(404).json({
+        error: "Category not found",
+      });
+    }
+    res.json(category);
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+}
+//not tested
+async function getCategoryMedicines(req, res) {
+  try {
+    const category = await prisma.category.findFirst({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!category) {
+      res.status(404).json({
+        error: "Category not found",
+      });
+    }
+    const medicines = await prisma.medicine.findMany({
+      where: {
+        categoryId: req.params,
+      },
+    });
+    res.json(medicines);
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+}
+
 module.exports = router;
