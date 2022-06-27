@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 
 const { extractToken, decodeToken } = require("../utils/jwt");
 const { categorySchema } = require("../validation/category");
+const jwt = require("jsonwebtoken");
 
 router.get("/", getCategories);
 router.post("/", createCategory);
@@ -15,11 +16,11 @@ router.delete("/:id", deleteCategory);
 
 async function getCategories(req, res) {
   try {
-    const token = extractToken(req);
-   
+    const token = await extractToken(req);
+
     const decoded = await decodeToken(token, process.env.ACCESS_TOKEN_SECRET);
 
-    const categories = await prisma.categories.findMany({
+    const categories = await prisma.category.findMany({
       where: {
         authorId: decoded.id,
       },
@@ -40,17 +41,20 @@ async function createCategory(req, res) {
       });
     }
 
-    const token = extractToken(req);
-    console.log(token);
-    
+    const token = await extractToken(req);
     const decoded = await decodeToken(token, process.env.ACCESS_TOKEN_SECRET);
- 
-    const category = await prisma.categories.create({
+
+    const category = await prisma.category.create({
       data: {
         name: value.name,
-        authorId: decoded.id,
+        author: {
+          connect: {
+            id: decoded.id,
+          },
+        },
       },
     });
+
     res.json(category);
   } catch (error) {
     res.status(401).json({ error: error.message });
@@ -65,9 +69,9 @@ async function updateCategory(req, res) {
         error: error.message,
       });
     }
-    const token = extractToken(req);
+    const token = await extractToken(req);
     const decoded = await decodeToken(token, process.env.ACCESS_TOKEN_SECRET);
-    const category = await prisma.categories.update({
+    const category = await prisma.category.updateMany({
       where: {
         id: req.params.id,
         authorId: decoded.id,
@@ -76,7 +80,18 @@ async function updateCategory(req, res) {
         name: value.name,
       },
     });
-    res.json(category);
+    if (!category) {
+      res.status(404).json({
+        error: "Category not found",
+      });
+    }
+
+    const updatedCategory = await prisma.category.findFirst({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.json(updatedCategory);
   } catch (error) {
     res.status(401).json({ error: error.message });
   }
@@ -84,14 +99,22 @@ async function updateCategory(req, res) {
 
 async function deleteCategory(req, res) {
   try {
-    const token = extractToken(req);
+    const token = await extractToken(req);
     const decoded = await decodeToken(token, process.env.ACCESS_TOKEN_SECRET);
-    const category = await prisma.categories.delete({
+    const category = await prisma.category.deleteMany({
       where: {
         id: req.params.id,
         authorId: decoded.id,
       },
     });
+    if (!category) {
+      res.status(404).json({
+        error: "Category not found",
+      });
+    }
+
+    //not returning deleted category
+
     res.json(category);
   } catch (error) {
     res.status(401).json({ error: error.message });
