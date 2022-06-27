@@ -9,14 +9,14 @@ async function extractToken(req) {
 }
 
 async function decodeToken(token, secret) {
-    console.log("hello")
+    
   return jwt.verify(token, secret);
 }
 
 //user directly from the request
 async function getLoggedInUser(req) {
   try {
-    extractToken(req);
+    
     const token = extractToken(req);
     const decoded = await decodeToken(token);
     
