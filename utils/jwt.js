@@ -30,3 +30,4 @@ async function getLoggedInUser(req) {
     }
   }
 }
+module.exports = { extractToken, getLoggedInUser, decodeToken };
