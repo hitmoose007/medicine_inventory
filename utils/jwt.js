@@ -32,9 +32,4 @@ async function getLoggedInUser(req) {
     }
   }
 }
-
-module.exports = {
-    extractToken,
-    decodeToken,
-    getLoggedInUser
-}
+module.exports = { extractToken, getLoggedInUser, decodeToken };
