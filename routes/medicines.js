@@ -14,11 +14,12 @@ require("dotenv").config();
 module.exports = router;
 
 router.post("/", isLoggedIn, createMed); //function to create a medicine
-// router.put("/:id", isLoggedIn, updateMed); //function to update a medicine
-// router.delete("/:id", isLoggedIn, deleteMed); //function to delete a medicine
+router.put("/:id", isLoggedIn, updateMed); //function to update a medicine
+router.delete("/:id", isLoggedIn, deleteMed); //function to delete a medicine
+//all tested they work
 
 async function createMed(req, res) {
-    console.log("creating");
+  console.log("creating");
   try {
     const { value, error } = medicineSchema.validate(req.body);
     if (error) {
@@ -51,3 +52,46 @@ async function createMed(req, res) {
     });
   }
 }
+
+async function updateMed(req, res) {
+    console.log("Updating")
+  const { value, error } = medicineUpdateSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({
+      error: error.message,
+    });
+  }
+  try {
+    const medicine = await prisma.medicine.update({
+      where: {
+        id: req.params.id,
+      },
+      data: {
+        name: value.name,
+        description: value.description,
+        quantity: value.quantity,
+        price: value.price,
+      },
+    });
+    res.json(medicine);
+  } catch (error) {
+    res.json({
+      error: error.message,
+    });
+  }
+}
+
+async function deleteMed(req, res) {
+    try {
+      const medicine = await prisma.medicine.delete({
+        where: {
+          id: req.params.id,
+        },
+      });
+      res.json(medicine);
+    } catch (error) {
+      res.json({
+        error: error.message,
+      });
+    }
+  }
