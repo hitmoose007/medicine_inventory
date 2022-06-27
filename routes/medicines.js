@@ -7,7 +7,7 @@ const { medicineSchema, medicineUpdateSchema } = require("../validation/medicine
 
 module.exports = router;
 
-router.post("/create", isLoggedIn, createMed); //function to create a medicine
+router.post("/create",isLoggedIn, createMed); //function to create a medicine
 // router.put("/:id", isLoggedIn, updateMed); //function to update a medicine
 // router.delete("/:id", isLoggedIn, deleteMed); //function to delete a medicine
 

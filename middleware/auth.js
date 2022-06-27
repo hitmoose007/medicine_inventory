@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const { extractToken, decodeToken } = require("../utils/jwt");
 
-//idk if works lol
+//not work
 async function isLoggedIn(req, res, next) {
   try {
     const token = extractToken(req);
