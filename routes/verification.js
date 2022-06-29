@@ -33,4 +33,31 @@ router.get("/:token", async (req, res) => {
   }
 });
 
+router.get("/forgotpassword/:token", async (req, res) => {
+  try {
+    const decoded = await jwt.verify(
+      req.params.token,
+      process.env.VERIFICATION_TOKEN_SECRET
+    );
+    
+    prisma.user
+      .update({
+        where: {
+          id: decoded.user,
+        },
+        data: {
+          password:req.body.password
+        },
+      })
+      .then((user) => {
+        res.json({
+          message: "password reset!",
+        });
+      })
+
+  } catch (e) {
+    res.send("error");
+  }
+});
+
 module.exports = router;

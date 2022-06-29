@@ -11,6 +11,7 @@ const { transporter } = require("../utils/mail");
 require("dotenv").config();
 
 router.post("/", userCreation);
+router.post("/forgotpassword",forgotPassword);
 
 async function userCreation(req, res) {
   //create user|
@@ -89,4 +90,66 @@ async function userCreation(req, res) {
     });
   }
 }
+
+async function forgotPassword(req,res){
+  console.log(req.body)
+  try{
+        //make sure user already exist
+        const user = await prisma.user.findFirst({
+          where: {
+            email: req.body.email,
+          },
+        });
+        const message =
+        'You will receive a reset email if user with that email exist';
+        if (!user) {
+          return res.status(400).json({
+            error: "User doesn't exist",
+          });
+        }
+        if (!user.isVerified){
+          return res.status(400).json({
+            error:"User not verified",
+          });
+        }
+            // async email
+    jwt.sign(
+      {
+        user: user.id,
+      },
+      process.env.VERIFICATION_TOKEN_SECRET,
+      {
+        expiresIn: "1d",
+      },
+      (err, emailToken) => {
+        console.log("hello");
+        const url = `http://localhost:5000/api/verification/forgotpassword/${emailToken}`;
+
+        transporter.sendMail(
+          {
+            to: user.email,
+            subject: "Forgot Password",
+            html: `Please click this url to reset your password: <a href="${url}">${url}</a>`,
+          },
+          (err, info) => {
+            console.log("here");
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(info);
+            }
+          }
+        );
+      }
+    );
+
+    //end async email
+  }
+  catch (error) {
+    res.json({
+      error: error.message,
+    });
+  }
+}
+
 module.exports = router;
