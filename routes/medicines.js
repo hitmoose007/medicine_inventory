@@ -13,29 +13,29 @@ require("dotenv").config();
 
 module.exports = router;
 
-router.get("/",isLoggedIn,getMedicines)
-router.post("/", isLoggedIn, createMed); //function to create a medicine
-router.put("/:id", isLoggedIn, updateMed); //function to update a medicine
+router.get("/", isLoggedIn, getMedicines);
+router.post("/:categoryId/", isLoggedIn, createMed); //function to create a medicine basically we have to pick category and uskai ander jaa kar we create the medicine
+router.put("/:id/", isLoggedIn, updateMed); //function to update a medicine
 router.delete("/:id", isLoggedIn, deleteMed); //function to delete a medicine
-//all tested they work
+
 
 async function getMedicines(req, res) {
-    try {
-      const token = await extractToken(req);
-  
-      const decoded = await decodeToken(token, process.env.ACCESS_TOKEN_SECRET);
-  
-      const meds = await prisma.medicine.findMany({
-        where: {
-          authorId: decoded.id,
-        },
-      });
-  
-      res.json(meds);
-    } catch (error) {
-      res.status(401).json({ error: error.message });
-    }
+  try {
+    const token = await extractToken(req);
+
+    const decoded = await decodeToken(token, process.env.ACCESS_TOKEN_SECRET);
+
+    const meds = await prisma.medicine.findMany({
+      where: {
+        authorId: decoded.id,
+      },
+    });
+
+    res.json(meds);
+  } catch (error) {
+    res.status(401).json({ error: error.message });
   }
+}
 
 async function createMed(req, res) {
   console.log("creating");
@@ -47,7 +47,7 @@ async function createMed(req, res) {
       });
     }
     const token = await extractToken(req);
-  
+
     const decoded = await decodeToken(token, process.env.ACCESS_TOKEN_SECRET);
 
     const medicine = await prisma.medicine.create({
@@ -61,6 +61,11 @@ async function createMed(req, res) {
             id: decoded.id,
           },
         },
+        category:{
+          connect:{
+            id:req.params.categoryId
+          }
+        }
       },
     });
     res.json(medicine);
@@ -113,3 +118,4 @@ async function deleteMed(req, res) {
     });
   }
 }
+
