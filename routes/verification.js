@@ -32,7 +32,7 @@ router.get("/:token", async (req, res) => {
     res.send("error");
   }
 });
-
+//not tested
 router.get("/forgotpassword/:token", async (req, res) => {
   try {
     const decoded = await jwt.verify(

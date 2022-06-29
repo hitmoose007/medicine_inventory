@@ -3,7 +3,10 @@ const router = express.Router();
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { userRegisterationSchema } = require("../validation/users");
+const {
+  userRegisterationSchema,
+  forgotPasswordSchema,
+} = require("../validation/users");
 
 const jwt = require("jsonwebtoken");
 const { hashPassword, comparePassword } = require("../utils/hash");
@@ -11,16 +14,16 @@ const { transporter } = require("../utils/mail");
 require("dotenv").config();
 
 router.post("/", userCreation);
-router.post("/forgotpassword",forgotPassword);
+router.post("/forgotpassword", forgotPassword);
 
 async function userCreation(req, res) {
   //create user|
-  console.log(req.body)
+  console.log(req.body);
   try {
     const { value, error } = userRegisterationSchema.validate(req.body);
 
     if (error) {
-      console.log(req)
+      console.log(req);
       console.log(error);
       res.status(400).json({
         error: error.message,
@@ -90,29 +93,39 @@ async function userCreation(req, res) {
     });
   }
 }
+//not tested
+async function forgotPassword(req, res) {
+  console.log(req.body);
+  try {
+    const { value, error } = forgotPasswordSchema.validate(req.body);
+    if (error) {
+      console.log(req);
+      console.log(error);
+      res.status(400).json({
+        error: error.message,
+      });
+    }
 
-async function forgotPassword(req,res){
-  console.log(req.body)
-  try{
-        //make sure user already exist
-        const user = await prisma.user.findFirst({
-          where: {
-            email: req.body.email,
-          },
-        });
-        const message =
-        'You will receive a reset email if user with that email exist';
-        if (!user) {
-          return res.status(400).json({
-            error: "User doesn't exist",
-          });
-        }
-        if (!user.isVerified){
-          return res.status(400).json({
-            error:"User not verified",
-          });
-        }
-            // async email
+    //make sure user already exist
+    const user = await prisma.user.findFirst({
+      where: {
+        email: value.email,
+      },
+    });
+
+    const message =
+      "You will receive a reset email if user with that email exist";
+    if (!user) {
+      return res.status(400).json({
+        error: "User doesn't exist",
+      });
+    }
+    if (!user.isVerified) {
+      return res.status(400).json({
+        error: "User not verified",
+      });
+    }
+    // async email
     jwt.sign(
       {
         user: user.id,
@@ -124,7 +137,7 @@ async function forgotPassword(req,res){
       (err, emailToken) => {
         console.log("hello");
         const url = `http://localhost:5000/api/verification/forgotpassword/${emailToken}`;
-
+        console.log(emailToken);
         transporter.sendMail(
           {
             to: user.email,
@@ -142,10 +155,11 @@ async function forgotPassword(req,res){
         );
       }
     );
-
+    res.json({
+      message:"email sent successfully",
+    });
     //end async email
-  }
-  catch (error) {
+  } catch (error) {
     res.json({
       error: error.message,
     });
