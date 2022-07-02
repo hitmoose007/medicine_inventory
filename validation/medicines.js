@@ -6,7 +6,7 @@ const medicineSchema = joi.object({
     description: joi.string().required().max(500),
     price:joi.number().required(),
     quantity:joi.number().required(),
-
+    category:joi.string(),
 
 }); 
 
@@ -16,7 +16,7 @@ const medicineUpdateSchema = joi.object({
     description: joi.string().required().max(500),
     price:joi.number().required(),
     quantity:joi.number().required(),
-    
+    category:joi.string(),
 });
 
 
