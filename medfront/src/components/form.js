@@ -11,20 +11,38 @@ export default function Form({
   submitBtn,
   onSubmit,
   redirect,
+  url,
+
 }) {
   const initialForm = useMemo(() => prepareForm(formArr), [formArr]);
   const [form, setForm] = useState(initialForm);
 
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(form),
+  };
+
+  const onSumbitHandler = () => {
+    console.log(form);
+    fetch(url, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        onSubmit(data);
+        setForm(initialForm);
+      })
+      .catch((error) => console.log(error));
+  };
+
   const onChangeHandler = (e) =>
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
-  const onSumbitHandler = () => onSubmit(form, () => setForm(initialForm));
 
   const hasRedirect = !!redirect;
 
   return (
-    <div className="">
+    <div className=''>
       <form className=' bg-slate-200 w-2/5 m-auto p-7 rounded-md'>
-        <h1 className=" text-4xl p-6 ">{title}</h1>
+        <h1 className=' text-4xl p-6 '>{title}</h1>
         {formArr.map(({ label, name, type }, index) => (
           <div key={index}>
             <label htmlFor={name}>{label}</label>
@@ -39,14 +57,15 @@ export default function Form({
           </div>
         ))}
 
-        <button 
-        className = 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 mt-4 px-4 rounded focus:outline-none focus:shadow-outline'
-         type="submit"
-          onClick=
-          {(e) => {
+        <button
+          className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 mt-4 px-4 rounded focus:outline-none focus:shadow-outline'
+          type='submit'
+          onClick={(e) => {
             e.preventDefault();
             onSumbitHandler();
-          }}>{submitBtn}
+          }}
+        >
+          {submitBtn}
         </button>
       </form>
     </div>
@@ -67,6 +86,7 @@ Form.defaultProps = {
       type: "password",
     },
   ],
+  isLoginForm: false,
   submitBtn: "Sign In",
   onSubmit: (form) => console.log(form),
   redirect: null,
