@@ -5,28 +5,43 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 
 export default function Main(){
-    const [meds,setMeds]=useState()
-    const token=`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNsNHY5cmpyODAwMDI1NHVpazE0N2s3YnIiLCJpYXQiOjE2NTY3NDc2OTIsImV4cCI6MTY1Njc1MTI5Mn0.cp4bHctE8X7elsGKEn-KbPdTW0ntb1mXwlt3PJhjyOg`//will get from local storage or cookies but this is for testing
+    const [meds,setMeds]=useState([])
+    const [medArr,setMedArr]=useState(meds)
+    axios.defaults.headers.common['Authorization'] =localStorage.getItem('accessToken')
     useEffect(()=>{
         const result = async()=>{
-            const res=await axios.get("http://localhost:5000/api/medicines/",{headers:{"Authorization":`${token}`}})//just for testing
+            const res=await axios.get("http://localhost:5000/api/medicines/")//just for testing
             setMeds(res.data)
             console.log(res.data)
 
         }
         result();
-    },[meds])
+    },[medArr])
     
   function handleDelete(id){
-    const headers={
-      'Authorization':`${token}`,
-    }
-    axios.delete(`http://localhost:5000/api/medicines/${id}`,{headers}).then(()=>console.log("Success"))
 
+    axios.delete(`http://localhost:5000/api/medicines/${id}`).then(()=>console.log("Success"))
+    setMedArr(meds)
+  }
+  function handleIncrement(id){
+    axios.put(`http://localhost:5000/api/medicines/increment/${id}`).then(()=>console.log("incremented"))
+    setMedArr(meds)
+  }
+  function handleDecrement(id){
+
+    axios.put(`http://localhost:5000/api/medicines/decrement/${id}`).then(()=>console.log("decremented"))
+    setMedArr(meds)
   }
     console.log(meds)
     const medList=meds?.map((med)=>{
-        return <List id={med.id} name={med.name} description={med.description} token={token} handleDelete={handleDelete}/>//just for testing will change the props later when using our real db
+        return <List 
+        id={med.id} 
+        name={med.name} 
+        description={med.description} 
+        quantity={med.quantity} 
+        handleDelete={handleDelete} 
+        handleIncrement={handleIncrement} 
+        handleDecrement={handleDecrement}/>
     })
     return(
         <div>

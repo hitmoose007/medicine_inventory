@@ -17,8 +17,48 @@ router.get("/", isLoggedIn, getMedicines);//get all meds
 router.post("/:categoryId/", isLoggedIn, createMed); //function to create a medicine basically we have to pick category and uskai ander jaa kar we create the medicine
 router.put("/:id/", isLoggedIn, updateMed); //function to update a medicine
 router.delete("/:id", isLoggedIn, deleteMed); //function to delete a medicine
-// router.put("/decrement/:id",isLoggedIn, decrementMed);//function to decrement medicine
+router.put("/decrement/:id",isLoggedIn, decrementMed);//function to decrement medicine
+router.put("/increment/:id",isLoggedIn, incrementMed);//function to decrement medicine
 
+async function decrementMed(req,res){
+  try{
+
+    const medicine = await prisma.medicine.update({
+      where: {
+        id: req.params.id,
+      },
+      data: {
+        quantity: {
+          decrement:1,
+        },
+      },
+    });
+    res.json(medicine.name+"Decremented")
+  }
+  catch (error) {
+    res.json({
+      error: error.message,
+    });  }
+}
+async function incrementMed(req,res){
+  try{
+    const medicine = await prisma.medicine.update({
+      where: {
+        id: req.params.id,
+      },
+      data: {
+          quantity: {
+            increment:1,
+          },
+      },
+    });
+    res.json(medicine.name+"Incremented")
+  }
+  catch (error) {
+    res.json({
+      error: error.message,
+    });  }
+}
 
 async function getMedicines(req, res) {
   try {
