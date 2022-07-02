@@ -14,7 +14,9 @@ body {
 } */
 
 
-
+li{
+  list-style: none;
+}
 
 .header{
   position: relative;
