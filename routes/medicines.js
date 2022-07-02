@@ -13,7 +13,7 @@ require("dotenv").config();
 
 module.exports = router;
 
-router.get("/", isLoggedIn, getMedicines);
+router.get("/", isLoggedIn, getMedicines);//get all meds
 router.post("/:categoryId/", isLoggedIn, createMed); //function to create a medicine basically we have to pick category and uskai ander jaa kar we create the medicine
 router.put("/:id/", isLoggedIn, updateMed); //function to update a medicine
 router.delete("/:id", isLoggedIn, deleteMed); //function to delete a medicine
