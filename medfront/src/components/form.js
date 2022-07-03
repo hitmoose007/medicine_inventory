@@ -12,7 +12,6 @@ export default function Form({
   onSubmit,
   redirect,
   url,
-
 }) {
   const initialForm = useMemo(() => prepareForm(formArr), [formArr]);
   const [form, setForm] = useState(initialForm);

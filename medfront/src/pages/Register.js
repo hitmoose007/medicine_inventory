@@ -35,6 +35,7 @@ export default function Register() {
   const submitBtn = "Register";
   const redirect = "/login";
   const title = "Register";
+  const url = "http://localhost:5000/api/users";
 
   return (
     <div>
@@ -43,6 +44,8 @@ export default function Register() {
         formArr={formmArr}
         submitBtn={submitBtn}
         redirect={redirect}
+        url={url}
+      
       />
       <Link to='/'></Link>
     </div>
