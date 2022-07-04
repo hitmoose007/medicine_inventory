@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import MedForm from "../components/medForm";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Update() {
   const [formData, setFormData] = useState({
@@ -15,7 +16,10 @@ export default function Update() {
   });
   axios.defaults.headers.common["Authorization"] =
     localStorage.getItem("accessToken");
+
   const params = useParams();
+  const navigate=useNavigate();
+  
   useEffect(() => {
     const result = async () => {
       const res = await axios.get(
@@ -49,6 +53,7 @@ export default function Update() {
         })
     }
     submit();
+    navigate("/main")
   }
   return (
     <div>

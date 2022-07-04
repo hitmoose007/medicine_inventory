@@ -1,6 +1,8 @@
 import React from "react";
 import Form from "../components/form";
 import { Link } from "react-router-dom";
+
+
 export default function Register() {
   const formmArr = [
     {
