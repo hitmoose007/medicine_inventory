@@ -35,6 +35,7 @@ export default function Main(){
     console.log(meds)
     const medList=meds?.map((med)=>{
         return <List 
+        key={med.id}
         id={med.id} 
         name={med.name} 
         description={med.description} 
