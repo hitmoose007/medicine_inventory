@@ -7,6 +7,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import Verify from './pages/Verify';
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         <Route index exact element={<Login/>}/>
         <Route path="/register" exact element={<Register/>}/>
         <Route path="/main" exact element={<Main/>}/>
+        <Route path="/verify/:tokenId" exact element={<Verify/>}/>
+
       </Routes>
       </Router>
   );
