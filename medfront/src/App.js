@@ -2,6 +2,7 @@ import './App.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Main from './pages/Main';
+import Update from './pages/Update';
 import {
   BrowserRouter as Router,
   Routes,
@@ -18,6 +19,7 @@ function App() {
         <Route path="/main" exact element={<Main/>}/>
         <Route path="/verify/:tokenId" exact element={<Verify/>}/>
 
+        <Route path="/update/:id" exact element={<Update/>}/>
       </Routes>
       </Router>
   );

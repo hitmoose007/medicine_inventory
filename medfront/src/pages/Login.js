@@ -1,13 +1,18 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 const url = "http://localhost:5000/api/auth/login";
 
 
 
+
 export default function Login() {
+  const navigate=useNavigate();
+
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -63,6 +68,7 @@ export default function Login() {
         }
       })
       .catch((error) => console.log(error));
+      navigate("/main")
   };
 
   return (
