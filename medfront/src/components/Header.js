@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate=useNavigate();
+  function handleClick(){
+    localStorage.clear()
+    navigate("/")
+  }
   return (
     <div className="header">
       Community Health Clinic
@@ -11,7 +17,7 @@ export default function Header() {
           <span>Add Items</span>
         </button>
       </Link>
-      <button className="button-1">
+      <button className="button-1" onClick={handleClick} >
         <span>Logout</span>
       </button>
       </div>
