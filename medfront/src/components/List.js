@@ -1,42 +1,50 @@
 import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
+import {AiOutlineMinusCircle,AiOutlinePlusCircle} from "react-icons/ai"
+import {FaRegTrashAlt} from "react-icons/fa"
 
 export default function List(props) {
   return (
-    <li>
-      <div className="list">
-        <div className="medName">
+      <div className="row">
+        <div className="col">
           <h2>{props.name}</h2>
-          <h2>{props.quantity}</h2>
         </div>
-        <div className="desc">
+        <div className="col">
           <p>{props.description}</p>
         </div>
-        <div className="buttons">
+        <div className="col">
           <button
             className="minus"
             onClick={() => props.handleDecrement(props.id)}
           >
-            Minus
+            <AiOutlineMinusCircle/>
           </button>
+        </div>
+        <div className="col">
+          <div className="quantity">{props.quantity}</div>
+        </div>
+        <div className="col">
           <button
             className="plus"
             onClick={() => props.handleIncrement(props.id)}
           >
-            Plus
+            <AiOutlinePlusCircle/>
           </button>
+        </div>
+        <div className="col">
           <button
             className="delete"
             onClick={() => props.handleDelete(props.id)}
           >
-            Delete
+            <FaRegTrashAlt/>
           </button>
+        </div>
+        <div className="col">
           <button className="update">
-            <Link to={{pathname:`/update/${props.id}`}}>Update</Link>
+            <Link to={{ pathname: `/update/${props.id}` }}>Update</Link>
           </button>
         </div>
       </div>
-    </li>
   );
 }
