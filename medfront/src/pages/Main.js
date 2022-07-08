@@ -7,15 +7,22 @@ import axios from "axios";
 export default function Main() {
   const [meds, setMeds] = useState([]);
   const [medArr, setMedArr] = useState(meds);
+
   axios.defaults.headers.common["Authorization"] =
-    localStorage.getItem("accessToken");
+    "Bearer " + localStorage.getItem("accessToken");
   useEffect(() => {
     const result = async () => {
-        console.log(axios.defaults.headers.common["Authorization"]);
-      const res = await axios.get("http://localhost:5000/api/medicines/").then(console.log("success"))
+      const res = await axios
+        .get("http://localhost:5000/api/medicines/")
+        .then((res) => {
+          setMeds(res.data);
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+
       //just for testing
-      setMeds(res.data);
-      
     };
     result();
   }, [medArr]);
@@ -56,19 +63,19 @@ export default function Main() {
   return (
     <div>
       <Header />
-      <div className="list-cont">
-        <h1 className="dash">Dashboard</h1>
-        <div className="list">
-            <div className="row">
-              <div className="col">
-                <b>Name</b>
-              </div>
-              <div className="col">
-                <b>Medicine</b>
-              </div>
-              <div className="col"></div>
-              <div className="col">
-                <b>Quantity</b>
+      <div className='list-cont'>
+        <h1 className='dash'>Dashboard</h1>
+        <div className='list'>
+          <div className='row'>
+            <div className='col'>
+              <b>Name</b>
+            </div>
+            <div className='col'>
+              <b>Medicine</b>
+            </div>
+            <div className='col'></div>
+            <div className='col'>
+              <b>Quantity</b>
             </div>
           </div>
           {medList}
