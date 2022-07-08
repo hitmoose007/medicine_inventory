@@ -7,13 +7,14 @@ const { extractToken, decodeToken } = require("../utils/jwt");
 
 //not work
 async function isLoggedIn(req, res, next) {
+    
   try {
     const header = req.headers["authorization"];
     if (!header) return res.status(401).json({ error: "Unauthorized" });
 
     const token = header.split(" ")[1];
-     
     
+    console.log(token);
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     
@@ -23,6 +24,7 @@ async function isLoggedIn(req, res, next) {
       },
     });
    
+    
     if (!user) {
       return res.status(401).json({ error: "Unauthorized" });
     }
