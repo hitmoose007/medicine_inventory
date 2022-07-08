@@ -19,7 +19,7 @@ router.get("/:id/medicines", getCategoryMedicines);
 async function getCategories(req, res) {
   try {
     const token = await extractToken(req);
-
+    console.log(token);
     const decoded = await decodeToken(token, process.env.ACCESS_TOKEN_SECRET);
 
     const categories = await prisma.category.findMany({

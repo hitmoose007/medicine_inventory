@@ -11,9 +11,11 @@ export default function Main() {
     localStorage.getItem("accessToken");
   useEffect(() => {
     const result = async () => {
-      const res = await axios.get("http://localhost:5000/api/medicines/"); //just for testing
+        console.log(axios.defaults.headers.common["Authorization"]);
+      const res = await axios.get("http://localhost:5000/api/medicines/").then(console.log("success"))
+      //just for testing
       setMeds(res.data);
-      console.log(res.data);
+      
     };
     result();
   }, [medArr]);
